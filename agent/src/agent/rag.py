@@ -1,33 +1,61 @@
 """
 rag.py — Document loading, chunking, embedding, and retrieval.
-Uses ChromaDB (in-memory) + Google's gemini-embedding-001 model.
+Uses Qdrant (Docker) + Google's text-embedding-004 model.
 """
 
 import os
+import uuid
 import logging
 from pathlib import Path
 from typing import List
 
 import pypdf
-import chromadb
-from chromadb.utils import embedding_functions
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue
+from google import genai
+from dotenv import load_dotenv
+
+# FIX: Load env vars directly in this file BEFORE initializing any clients.
+# This makes it completely immune to import-order bugs in other files.
+load_dotenv(".env.local")
 
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 500      # characters
-CHUNK_OVERLAP = 50    # characters
+CHUNK_SIZE = 500
+CHUNK_OVERLAP = 50
 COLLECTION_NAME = "knowledge_base"
 TOP_K = 4
+
+# Connect to local Qdrant instance
+qdrant = QdrantClient(url="http://localhost:6333")
+
+# This will now successfully find the GOOGLE_API_KEY
+ai_client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+
+def _init_collection():
+    """Ensure Qdrant collection exists."""
+    if not qdrant.collection_exists(COLLECTION_NAME):
+        qdrant.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(size=768, distance=Distance.COSINE),
+        )
+
+
+def _get_embedding(text: str) -> List[float]:
+    """Get vector embedding from Google GenAI."""
+    response = ai_client.models.embed_content(
+        model='text-embedding-004',
+        contents=text
+    )
+    return response.embeddings[0].values
 
 
 def _load_pdf(path: Path) -> str:
     """Extract text from a PDF file."""
     reader = pypdf.PdfReader(str(path))
     pages = [page.extract_text() or "" for page in reader.pages]
-    text = "\n".join(pages)
-    logger.info(
-        f"Loaded PDF '{path.name}' — {len(reader.pages)} pages, {len(text)} chars")
-    return text
+    return "\n".join(pages)
 
 
 def _chunk_text(text: str) -> List[str]:
@@ -43,65 +71,72 @@ def _chunk_text(text: str) -> List[str]:
     return chunks
 
 
-def build_index(doc_path: str) -> chromadb.Collection:
+def build_index(doc_path: str, doc_id: str) -> None:
     """
-    Load a PDF, chunk it, embed it, store in an in-memory ChromaDB collection.
-    Returns the collection ready for querying.
+    Load a PDF, chunk it, embed it, and store in Qdrant tagged with doc_id.
     """
+    _init_collection()
+
     path = Path(doc_path)
     if not path.exists():
         raise FileNotFoundError(f"Document not found: {doc_path}")
 
     text = _load_pdf(path)
     chunks = _chunk_text(text)
-    logger.info(f"Split into {len(chunks)} chunks")
+    logger.info(f"Split into {len(chunks)} chunks for doc_id: {doc_id}")
 
-    # GoogleGeminiEmbeddingFunction reads GEMINI_API_KEY by default — your
-    # Google AI Studio key works for both GOOGLE_API_KEY and GEMINI_API_KEY,
-    # so we just mirror it into the env var Chroma expects.
-    os.environ.setdefault(
-        "GEMINI_API_KEY", os.environ.get("GOOGLE_API_KEY", ""))
+    points = []
+    for i, chunk in enumerate(chunks):
+        vector = _get_embedding(chunk)
+        points.append(
+            PointStruct(
+                id=str(uuid.uuid4()),
+                vector=vector,
+                payload={
+                    "doc_id": doc_id,
+                    "source": path.name,
+                    "chunk_index": i,
+                    "content": chunk
+                }
+            )
+        )
 
-    embedding_fn = embedding_functions.GoogleGeminiEmbeddingFunction(
-        model_name="gemini-embedding-001",
-        task_type="RETRIEVAL_DOCUMENT",
+    qdrant.upsert(
+        collection_name=COLLECTION_NAME,
+        points=points
     )
-
-    client = chromadb.Client()  # in-memory, no persistence needed for phase 1
-    collection = client.get_or_create_collection(
-        name=COLLECTION_NAME,
-        embedding_function=embedding_fn,
-    )
-
-    ids = [f"chunk_{i}" for i in range(len(chunks))]
-    metadatas = [{"source": path.name, "chunk_index": i}
-                 for i in range(len(chunks))]
-
-    collection.add(documents=chunks, ids=ids, metadatas=metadatas)
-    logger.info(f"Indexed {len(chunks)} chunks into ChromaDB")
-
-    return collection
+    logger.info(
+        f"Indexed {len(chunks)} chunks into Qdrant for doc_id {doc_id}")
 
 
-def query(collection: chromadb.Collection, text: str) -> List[dict]:
+def query(text: str, doc_id: str) -> List[dict]:
     """
-    Query the collection for chunks relevant to `text`.
-    Returns list of dicts with 'content' and 'source'.
+    Query Qdrant for chunks relevant to `text`, specifically filtered by `doc_id`.
     """
-    if collection.count() == 0:
-        return []
+    _init_collection()
 
-    results = collection.query(
-        query_texts=[text],
-        n_results=min(TOP_K, collection.count()),
-        include=["documents", "metadatas"],
+    vector = _get_embedding(text)
+
+    search_result = qdrant.search(
+        collection_name=COLLECTION_NAME,
+        query_vector=vector,
+        query_filter=Filter(
+            must=[
+                FieldCondition(
+                    key="doc_id",
+                    match=MatchValue(value=doc_id)
+                )
+            ]
+        ),
+        limit=TOP_K
     )
 
     chunks = []
-    for doc, meta in zip(results["documents"][0], results["metadatas"][0]):
+    for hit in search_result:
+        payload = hit.payload or {}
         chunks.append({
-            "content": doc,
-            "source": meta.get("source", "unknown"),
+            "content": payload.get("content", ""),
+            "source": payload.get("source", "unknown"),
         })
 
     return chunks

@@ -1,0 +1,511 @@
+[
+    {
+        "label": "runpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "runpy",
+        "description": "runpy",
+        "detail": "runpy",
+        "documentation": {}
+    },
+    {
+        "label": "annotations",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "site",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "site",
+        "description": "site",
+        "detail": "site",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "Agent",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "AgentSession",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "JobContext",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "JobProcess",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "RunContext",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "WorkerOptions",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "cli",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "function_tool",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "inference",
+        "importPath": "livekit.agents",
+        "description": "livekit.agents",
+        "isExtraImport": true,
+        "detail": "livekit.agents",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "pypdf",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pypdf",
+        "description": "pypdf",
+        "detail": "pypdf",
+        "documentation": {}
+    },
+    {
+        "label": "QdrantClient",
+        "importPath": "qdrant_client",
+        "description": "qdrant_client",
+        "isExtraImport": true,
+        "detail": "qdrant_client",
+        "documentation": {}
+    },
+    {
+        "label": "Distance",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "VectorParams",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "PointStruct",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "Filter",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "FieldCondition",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "MatchValue",
+        "importPath": "qdrant_client.models",
+        "description": "qdrant_client.models",
+        "isExtraImport": true,
+        "detail": "qdrant_client.models",
+        "documentation": {}
+    },
+    {
+        "label": "genai",
+        "importPath": "google",
+        "description": "google",
+        "isExtraImport": true,
+        "detail": "google",
+        "documentation": {}
+    },
+    {
+        "label": "build_index",
+        "importPath": "src.agent.rag",
+        "description": "src.agent.rag",
+        "isExtraImport": true,
+        "detail": "src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "CORSMiddleware",
+        "importPath": "fastapi.middleware.cors",
+        "description": "fastapi.middleware.cors",
+        "isExtraImport": true,
+        "detail": "fastapi.middleware.cors",
+        "documentation": {}
+    },
+    {
+        "label": "AccessToken",
+        "importPath": "livekit.api",
+        "description": "livekit.api",
+        "isExtraImport": true,
+        "detail": "livekit.api",
+        "documentation": {}
+    },
+    {
+        "label": "VideoGrants",
+        "importPath": "livekit.api",
+        "description": "livekit.api",
+        "isExtraImport": true,
+        "detail": "livekit.api",
+        "documentation": {}
+    },
+    {
+        "label": "bin_dir",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "bin_dir = os.path.dirname(abs_file)\nbase = bin_dir[: -len(\"bin\") - 1]  # strip away the bin part from the __file__, plus the path separator\n# prepend bin to PATH (this file is inside the bin directory)\nos.environ[\"PATH\"] = os.pathsep.join([bin_dir, *os.environ.get(\"PATH\", \"\").split(os.pathsep)])\nos.environ[\"VIRTUAL_ENV\"] = base  # virtual env is right above bin directory\nos.environ[\"VIRTUAL_ENV_PROMPT\"] = \"agent\" or os.path.basename(base)  # noqa: SIM222\n# add the virtual environments libraries to the host python import mechanism\nprev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "base",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "base = bin_dir[: -len(\"bin\") - 1]  # strip away the bin part from the __file__, plus the path separator\n# prepend bin to PATH (this file is inside the bin directory)\nos.environ[\"PATH\"] = os.pathsep.join([bin_dir, *os.environ.get(\"PATH\", \"\").split(os.pathsep)])\nos.environ[\"VIRTUAL_ENV\"] = base  # virtual env is right above bin directory\nos.environ[\"VIRTUAL_ENV_PROMPT\"] = \"agent\" or os.path.basename(base)  # noqa: SIM222\n# add the virtual environments libraries to the host python import mechanism\nprev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))\n    site.addsitedir(path)",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"PATH\"]",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "os.environ[\"PATH\"] = os.pathsep.join([bin_dir, *os.environ.get(\"PATH\", \"\").split(os.pathsep)])\nos.environ[\"VIRTUAL_ENV\"] = base  # virtual env is right above bin directory\nos.environ[\"VIRTUAL_ENV_PROMPT\"] = \"agent\" or os.path.basename(base)  # noqa: SIM222\n# add the virtual environments libraries to the host python import mechanism\nprev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))\n    site.addsitedir(path)\nsys.path[:] = sys.path[prev_length:] + sys.path[0:prev_length]\nsys.real_prefix = sys.prefix",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"VIRTUAL_ENV\"]",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "os.environ[\"VIRTUAL_ENV\"] = base  # virtual env is right above bin directory\nos.environ[\"VIRTUAL_ENV_PROMPT\"] = \"agent\" or os.path.basename(base)  # noqa: SIM222\n# add the virtual environments libraries to the host python import mechanism\nprev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))\n    site.addsitedir(path)\nsys.path[:] = sys.path[prev_length:] + sys.path[0:prev_length]\nsys.real_prefix = sys.prefix\nsys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "os.environ[\"VIRTUAL_ENV_PROMPT\"]",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "os.environ[\"VIRTUAL_ENV_PROMPT\"] = \"agent\" or os.path.basename(base)  # noqa: SIM222\n# add the virtual environments libraries to the host python import mechanism\nprev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))\n    site.addsitedir(path)\nsys.path[:] = sys.path[prev_length:] + sys.path[0:prev_length]\nsys.real_prefix = sys.prefix\nsys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "prev_length",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "prev_length = len(sys.path)\nfor lib in \"../lib/python3.14/site-packages\".split(os.pathsep):\n    path = os.path.realpath(os.path.join(bin_dir, lib))\n    site.addsitedir(path)\nsys.path[:] = sys.path[prev_length:] + sys.path[0:prev_length]\nsys.real_prefix = sys.prefix\nsys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "sys.path[:]",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "sys.path[:] = sys.path[prev_length:] + sys.path[0:prev_length]\nsys.real_prefix = sys.prefix\nsys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "sys.real_prefix",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "sys.real_prefix = sys.prefix\nsys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "sys.prefix",
+        "kind": 5,
+        "importPath": "agent..venv.bin.activate_this",
+        "description": "agent..venv.bin.activate_this",
+        "peekOfCode": "sys.prefix = base",
+        "detail": "agent..venv.bin.activate_this",
+        "documentation": {}
+    },
+    {
+        "label": "RagAgent",
+        "kind": 6,
+        "importPath": "agent.src.agent.main",
+        "description": "agent.src.agent.main",
+        "peekOfCode": "class RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(\n                \"You are a helpful voice assistant who answers questions about \"\n                \"the document loaded into your knowledge base. \"\n                \"Always call the search_knowledge_base tool before answering \"\n                \"any question about its content — never guess or make things up. \"\n                \"Keep responses short and conversational, since this is spoken aloud. \"",
+        "detail": "agent.src.agent.main",
+        "documentation": {}
+    },
+    {
+        "label": "prewarm",
+        "kind": 2,
+        "importPath": "agent.src.agent.main",
+        "description": "agent.src.agent.main",
+        "peekOfCode": "def prewarm(proc: JobProcess) -> None:\n    pass\nclass RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(\n                \"You are a helpful voice assistant who answers questions about \"\n                \"the document loaded into your knowledge base. \"\n                \"Always call the search_knowledge_base tool before answering \"",
+        "detail": "agent.src.agent.main",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "agent.src.agent.main",
+        "description": "agent.src.agent.main",
+        "peekOfCode": "logger = logging.getLogger(\"voice-rag-agent\")\nlogger.setLevel(logging.INFO)\nload_dotenv(\".env.local\")\ndef prewarm(proc: JobProcess) -> None:\n    pass\nclass RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(",
+        "detail": "agent.src.agent.main",
+        "documentation": {}
+    },
+    {
+        "label": "build_index",
+        "kind": 2,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "def build_index(doc_path: str, doc_id: str) -> None:\n    \"\"\"\n    Load a PDF, chunk it, embed it, and store in Qdrant tagged with doc_id.\n    \"\"\"\n    _init_collection()\n    path = Path(doc_path)\n    if not path.exists():\n        raise FileNotFoundError(f\"Document not found: {doc_path}\")\n    text = _load_pdf(path)\n    chunks = _chunk_text(text)",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "query",
+        "kind": 2,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "def query(text: str, doc_id: str) -> List[dict]:\n    \"\"\"\n    Query Qdrant for chunks relevant to `text`, specifically filtered by `doc_id`.\n    \"\"\"\n    _init_collection()\n    vector = _get_embedding(text)\n    search_result = qdrant.search(\n        collection_name=COLLECTION_NAME,\n        query_vector=vector,\n        query_filter=Filter(",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nCHUNK_SIZE = 500\nCHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "CHUNK_SIZE",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "CHUNK_SIZE = 500\nCHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "CHUNK_OVERLAP",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "CHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "COLLECTION_NAME",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "COLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "TOP_K",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "TOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "qdrant",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "qdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(size=768, distance=Distance.COSINE),\n        )",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "ai_client",
+        "kind": 5,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "ai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(size=768, distance=Distance.COSINE),\n        )\ndef _get_embedding(text: str) -> List[float]:\n    \"\"\"Get vector embedding from Google GenAI.\"\"\"",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "agent.src.api.server",
+        "description": "agent.src.api.server",
+        "peekOfCode": "app = FastAPI()\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n@app.post(\"/upload\")\nasync def upload_document(file: UploadFile = File(...)):\n    if not file.filename.endswith(\".pdf\"):",
+        "detail": "agent.src.api.server",
+        "documentation": {}
+    }
+]
