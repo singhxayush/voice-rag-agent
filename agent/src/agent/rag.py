@@ -15,8 +15,6 @@ from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, Fi
 from google import genai
 from dotenv import load_dotenv
 
-# FIX: Load env vars directly in this file BEFORE initializing any clients.
-# This makes it completely immune to import-order bugs in other files.
 load_dotenv(".env.local")
 
 logger = logging.getLogger(__name__)

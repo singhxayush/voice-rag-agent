@@ -18,7 +18,6 @@ from livekit.agents import (
     function_tool,
     inference,
 )
-# FIX: Removed the broken turn_detector import
 
 from .rag import query as rag_query
 

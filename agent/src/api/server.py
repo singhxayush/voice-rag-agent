@@ -8,7 +8,6 @@ from livekit.api import AccessToken, VideoGrants
 from pydantic import BaseModel
 from src.agent.rag import answer
 
-# 1. Load env vars right away. The formatter will put this below the imports above.
 load_dotenv(".env.local")
 
 PROMPT_FILE = os.path.join(".", "tmp", "custom_prompt.txt")
