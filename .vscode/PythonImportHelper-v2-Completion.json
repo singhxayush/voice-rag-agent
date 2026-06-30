@@ -247,14 +247,6 @@
         "documentation": {}
     },
     {
-        "label": "build_index",
-        "importPath": "src.agent.rag",
-        "description": "src.agent.rag",
-        "isExtraImport": true,
-        "detail": "src.agent.rag",
-        "documentation": {}
-    },
-    {
         "label": "FastAPI",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -308,6 +300,31 @@
         "description": "livekit.api",
         "isExtraImport": true,
         "detail": "livekit.api",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "answer",
+        "importPath": "src.agent.rag",
+        "description": "src.agent.rag",
+        "isExtraImport": true,
+        "detail": "src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
         "documentation": {}
     },
     {
@@ -423,7 +440,7 @@
         "kind": 2,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "def build_index(doc_path: str, doc_id: str) -> None:\n    \"\"\"\n    Load a PDF, chunk it, embed it, and store in Qdrant tagged with doc_id.\n    \"\"\"\n    _init_collection()\n    path = Path(doc_path)\n    if not path.exists():\n        raise FileNotFoundError(f\"Document not found: {doc_path}\")\n    text = _load_pdf(path)\n    chunks = _chunk_text(text)",
+        "peekOfCode": "def build_index(doc_path: str, doc_id: str) -> None:\n    _init_collection()\n    path = Path(doc_path)\n    if not path.exists():\n        raise FileNotFoundError(f\"Document not found: {doc_path}\")\n    text = _load_pdf(path)\n    chunks = _chunk_text(text)\n    logger.info(f\"Split into {len(chunks)} chunks for doc_id: {doc_id}\")\n    if not chunks:\n        logger.warning(f\"No text extracted from {path.name}\")",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -432,7 +449,16 @@
         "kind": 2,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "def query(text: str, doc_id: str) -> List[dict]:\n    \"\"\"\n    Query Qdrant for chunks relevant to `text`, specifically filtered by `doc_id`.\n    \"\"\"\n    _init_collection()\n    vector = _get_embedding(text)\n    search_result = qdrant.search(\n        collection_name=COLLECTION_NAME,\n        query_vector=vector,\n        query_filter=Filter(",
+        "peekOfCode": "def query(text: str, doc_id: str) -> List[dict]:\n    _init_collection()\n    vector = _get_embeddings([text])[0]\n    search_result = qdrant.query_points(\n        collection_name=COLLECTION_NAME,\n        query=vector,\n        query_filter=Filter(\n            must=[\n                FieldCondition(\n                    key=\"doc_id\",",
+        "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "answer",
+        "kind": 2,
+        "importPath": "agent.src.agent.rag",
+        "description": "agent.src.agent.rag",
+        "peekOfCode": "def answer(question: str, doc_id: str) -> str:\n    \"\"\"\n    Retrieve relevant chunks and generate an answer using Gemini.\n    \"\"\"\n    chunks = query(question, doc_id)\n    if not chunks:\n        return \"I couldn't find any relevant information in the document.\"\n    context = \"\\n\\n\".join(\n        chunk[\"content\"] for chunk in chunks\n    )",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -441,7 +467,7 @@
         "kind": 5,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nCHUNK_SIZE = 500\nCHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nCHUNK_SIZE = 1200\nCHUNK_OVERLAP = 150\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -450,7 +476,7 @@
         "kind": 5,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "CHUNK_SIZE = 500\nCHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"",
+        "peekOfCode": "CHUNK_SIZE = 1200\nCHUNK_OVERLAP = 150\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -459,7 +485,7 @@
         "kind": 5,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "CHUNK_OVERLAP = 50\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):",
+        "peekOfCode": "CHUNK_OVERLAP = 150\nCOLLECTION_NAME = \"knowledge_base\"\nTOP_K = 4\n# Connect to local Qdrant instance\nqdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -486,7 +512,7 @@
         "kind": 5,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "qdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(size=768, distance=Distance.COSINE),\n        )",
+        "peekOfCode": "qdrant = QdrantClient(url=\"http://localhost:6333\")\n# This will now successfully find the GOOGLE_API_KEY\nai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(\n                size=3072,",
         "detail": "agent.src.agent.rag",
         "documentation": {}
     },
@@ -495,8 +521,17 @@
         "kind": 5,
         "importPath": "agent.src.agent.rag",
         "description": "agent.src.agent.rag",
-        "peekOfCode": "ai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(size=768, distance=Distance.COSINE),\n        )\ndef _get_embedding(text: str) -> List[float]:\n    \"\"\"Get vector embedding from Google GenAI.\"\"\"",
+        "peekOfCode": "ai_client = genai.Client(api_key=os.getenv(\"GOOGLE_API_KEY\"))\ndef _init_collection():\n    \"\"\"Ensure Qdrant collection exists.\"\"\"\n    if not qdrant.collection_exists(COLLECTION_NAME):\n        qdrant.create_collection(\n            collection_name=COLLECTION_NAME,\n            vectors_config=VectorParams(\n                size=3072,\n                distance=Distance.COSINE,\n            ))",
         "detail": "agent.src.agent.rag",
+        "documentation": {}
+    },
+    {
+        "label": "AskRequest",
+        "kind": 6,
+        "importPath": "agent.src.api.server",
+        "description": "agent.src.api.server",
+        "peekOfCode": "class AskRequest(BaseModel):\n    doc_id: str\n    question: str\n@app.post(\"/ask\")\nasync def ask_document(req: AskRequest):\n    response = answer(req.question, req.doc_id)\n    return {\n        \"answer\": response\n    }",
+        "detail": "agent.src.api.server",
         "documentation": {}
     },
     {
@@ -504,8 +539,44 @@
         "kind": 5,
         "importPath": "agent.src.api.server",
         "description": "agent.src.api.server",
-        "peekOfCode": "app = FastAPI()\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n@app.post(\"/upload\")\nasync def upload_document(file: UploadFile = File(...)):\n    if not file.filename.endswith(\".pdf\"):",
+        "peekOfCode": "app = FastAPI()\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n@app.get(\"/health\")\nasync def health_check():\n    return {\"status\": \"healthy\"}",
         "detail": "agent.src.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "_Known",
+        "kind": 6,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _Known:\n    def __init__(self):\n        self.key = []\n        self.value = []\nclass _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    for i in range(len(value)):\n        yield i",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "_String",
+        "kind": 6,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "class _String:\n    def __init__(self, value):\n        self.value = value\ndef _array_keys(value):\n    for i in range(len(value)):\n        yield i\ndef _object_keys(value):\n    for key in value:\n        yield key\ndef _is_array(value):",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "parse",
+        "kind": 2,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def parse(value, *args, **kwargs):\n    json = _json.loads(value, *args, **kwargs)\n    wrapped = []\n    for value in json:\n        wrapped.append(_wrap(value))\n    input = []\n    for value in wrapped:\n        if isinstance(value, _String):\n            input.append(value.value)\n        else:",
+        "detail": "frontend.node_modules.flatted.python.flatted",
+        "documentation": {}
+    },
+    {
+        "label": "stringify",
+        "kind": 2,
+        "importPath": "frontend.node_modules.flatted.python.flatted",
+        "description": "frontend.node_modules.flatted.python.flatted",
+        "peekOfCode": "def stringify(value, *args, **kwargs):\n    known = _Known()\n    input = []\n    output = []\n    i = int(_index(known, input, value))\n    while i < len(input):\n        output.append(_transform(known, input, input[i]))\n        i += 1\n    return _json.dumps(output, *args, **kwargs)",
+        "detail": "frontend.node_modules.flatted.python.flatted",
         "documentation": {}
     }
 ]

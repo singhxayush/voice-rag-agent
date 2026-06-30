@@ -21,8 +21,9 @@ load_dotenv(".env.local")
 
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 50
+CHUNK_SIZE = 1200
+CHUNK_OVERLAP = 150
+
 COLLECTION_NAME = "knowledge_base"
 TOP_K = 4
 
@@ -38,17 +39,19 @@ def _init_collection():
     if not qdrant.collection_exists(COLLECTION_NAME):
         qdrant.create_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=768, distance=Distance.COSINE),
-        )
+            vectors_config=VectorParams(
+                size=3072,
+                distance=Distance.COSINE,
+            ))
 
 
-def _get_embedding(text: str) -> List[float]:
-    """Get vector embedding from Google GenAI."""
+def _get_embeddings(texts: List[str]) -> List[List[float]]:
     response = ai_client.models.embed_content(
-        model='text-embedding-004',
-        contents=text
+        model="gemini-embedding-001",
+        contents=texts,
     )
-    return response.embeddings[0].values
+
+    return [embedding.values for embedding in response.embeddings]
 
 
 def _load_pdf(path: Path) -> str:
@@ -72,9 +75,6 @@ def _chunk_text(text: str) -> List[str]:
 
 
 def build_index(doc_path: str, doc_id: str) -> None:
-    """
-    Load a PDF, chunk it, embed it, and store in Qdrant tagged with doc_id.
-    """
     _init_collection()
 
     path = Path(doc_path)
@@ -83,11 +83,23 @@ def build_index(doc_path: str, doc_id: str) -> None:
 
     text = _load_pdf(path)
     chunks = _chunk_text(text)
+
     logger.info(f"Split into {len(chunks)} chunks for doc_id: {doc_id}")
 
+    if not chunks:
+        logger.warning(f"No text extracted from {path.name}")
+        return
+
+    vectors = _get_embeddings(chunks)
+
+    if len(vectors) != len(chunks):
+        raise RuntimeError(
+            f"Expected {len(chunks)} embeddings, got {len(vectors)}"
+        )
+
     points = []
-    for i, chunk in enumerate(chunks):
-        vector = _get_embedding(chunk)
+
+    for i, (chunk, vector) in enumerate(zip(chunks, vectors)):
         points.append(
             PointStruct(
                 id=str(uuid.uuid4()),
@@ -96,47 +108,87 @@ def build_index(doc_path: str, doc_id: str) -> None:
                     "doc_id": doc_id,
                     "source": path.name,
                     "chunk_index": i,
-                    "content": chunk
-                }
+                    "content": chunk,
+                },
             )
         )
 
     qdrant.upsert(
         collection_name=COLLECTION_NAME,
-        points=points
+        points=points,
     )
+
     logger.info(
-        f"Indexed {len(chunks)} chunks into Qdrant for doc_id {doc_id}")
+        f"Indexed {len(points)} chunks into Qdrant for doc_id {doc_id}"
+    )
 
 
 def query(text: str, doc_id: str) -> List[dict]:
-    """
-    Query Qdrant for chunks relevant to `text`, specifically filtered by `doc_id`.
-    """
     _init_collection()
 
-    vector = _get_embedding(text)
+    vector = _get_embeddings([text])[0]
 
-    search_result = qdrant.search(
+    search_result = qdrant.query_points(
         collection_name=COLLECTION_NAME,
-        query_vector=vector,
+        query=vector,
         query_filter=Filter(
             must=[
                 FieldCondition(
                     key="doc_id",
-                    match=MatchValue(value=doc_id)
+                    match=MatchValue(value=doc_id),
                 )
             ]
         ),
-        limit=TOP_K
-    )
+        limit=TOP_K,
+    ).points
 
     chunks = []
+
     for hit in search_result:
         payload = hit.payload or {}
+
         chunks.append({
             "content": payload.get("content", ""),
             "source": payload.get("source", "unknown"),
         })
 
     return chunks
+
+
+def answer(question: str, doc_id: str) -> str:
+    """
+    Retrieve relevant chunks and generate an answer using Gemini.
+    """
+
+    chunks = query(question, doc_id)
+
+    if not chunks:
+        return "I couldn't find any relevant information in the document."
+
+    context = "\n\n".join(
+        chunk["content"] for chunk in chunks
+    )
+
+    prompt = f"""
+You are a helpful assistant that answers questions ONLY using the provided context.
+
+If the answer cannot be found in the context, say:
+"I couldn't find that information in the document."
+
+Do not make up information.
+
+Context:
+{context}
+
+Question:
+{question}
+
+Answer:
+"""
+
+    response = ai_client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    return response.text

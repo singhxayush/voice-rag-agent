@@ -50,7 +50,11 @@ class RagAgent(Agent):
         """
         Search the knowledge base for information relevant to the query.
         """
+
+        logger.info(f"doc_id = {self._doc_id}")
+
         results = rag_query(query, self._doc_id)
+        logger.info(results)
         if not results:
             return "No relevant information found in the knowledge base."
 
@@ -63,8 +67,13 @@ async def entrypoint(ctx: JobContext) -> None:
     await ctx.connect()
 
     room_name = ctx.room.name
-    doc_id = room_name.replace(
-        "chat-", "") if room_name.startswith("chat-") else "default"
+
+    if not room_name.startswith("chat-"):
+        raise RuntimeError(
+            f"Invalid room name '{room_name}'. Expected chat-<doc_id>"
+        )
+
+    doc_id = room_name.removeprefix("chat-")
 
     logger.info(
         f"Connecting to room: {room_name} | Filtering by doc_id: {doc_id}")
