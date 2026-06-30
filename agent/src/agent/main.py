@@ -3,6 +3,7 @@ main.py — Voice RAG agent entrypoint.
 STT/TTS/LLM via LiveKit Cloud Inference, RAG via Qdrant in rag.py.
 """
 
+import json
 import logging
 from dotenv import load_dotenv
 
@@ -26,23 +27,25 @@ logger.setLevel(logging.INFO)
 
 load_dotenv(".env.local")
 
+DEFAULT_INSTRUCTIONS = (
+    "You are a helpful voice assistant who answers questions about "
+    "the document loaded into your knowledge base. "
+    "Always call the search_knowledge_base tool before answering "
+    "any question about its content — never guess or make things up. "
+    "Keep responses short and conversational, since this is spoken aloud. "
+    "Do not use markdown, emojis, or special formatting."
+)
+
 
 def prewarm(proc: JobProcess) -> None:
     pass
 
 
 class RagAgent(Agent):
-    def __init__(self, doc_id: str) -> None:
+    def __init__(self, doc_id: str, instructions: str | None = None) -> None:
         self._doc_id = doc_id
         super().__init__(
-            instructions=(
-                "You are a helpful voice assistant who answers questions about "
-                "the document loaded into your knowledge base. "
-                "Always call the search_knowledge_base tool before answering "
-                "any question about its content — never guess or make things up. "
-                "Keep responses short and conversational, since this is spoken aloud. "
-                "Do not use markdown, emojis, or special formatting."
-            )
+            instructions=instructions or DEFAULT_INSTRUCTIONS
         )
 
     @function_tool
@@ -75,6 +78,22 @@ async def entrypoint(ctx: JobContext) -> None:
 
     doc_id = room_name.removeprefix("chat-")
 
+    # Read custom prompt from participant metadata (set by the FastAPI token endpoint)
+    custom_prompt = None
+    for participant in ctx.room.remote_participants.values():
+        if participant.metadata:
+            try:
+                meta = json.loads(participant.metadata)
+                custom_prompt = meta.get("custom_prompt")
+            except (json.JSONDecodeError, AttributeError):
+                pass
+            break
+
+    if custom_prompt:
+        logger.info("Using custom prompt from participant metadata")
+    else:
+        logger.info("Using default agent instructions")
+
     logger.info(
         f"Connecting to room: {room_name} | Filtering by doc_id: {doc_id}")
 
@@ -86,8 +105,23 @@ async def entrypoint(ctx: JobContext) -> None:
         # FIX: Removed turn_detector argument, using default VAD
     )
 
+    rag_agent = RagAgent(doc_id=doc_id, instructions=custom_prompt)
+
+    @ctx.room.on("data_received")
+    def on_data_received(data: bytes, participant, kind):
+        try:
+            payload = json.loads(data.decode("utf-8"))
+            if payload.get("type") == "update_prompt":
+                new_prompt = payload.get("prompt")
+                if new_prompt:
+                    logger.info("Updating agent instructions mid-session via data channel")
+                    import asyncio
+                    asyncio.create_task(rag_agent.update_instructions(new_prompt))
+        except Exception as e:
+            logger.warning(f"Error handling data_received: {e}")
+
     await session.start(
-        agent=RagAgent(doc_id=doc_id),
+        agent=rag_agent,
         room=ctx.room,
     )
 

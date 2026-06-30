@@ -1,3 +1,4 @@
 qdrant_data/
 .vscode/
 node_modules/
+tmp/

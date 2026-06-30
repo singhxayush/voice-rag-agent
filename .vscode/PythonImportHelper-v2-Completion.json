@@ -44,6 +44,15 @@
         "documentation": {}
     },
     {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
@@ -319,15 +328,6 @@
         "documentation": {}
     },
     {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
-        "documentation": {}
-    },
-    {
         "label": "bin_dir",
         "kind": 5,
         "importPath": "agent..venv.bin.activate_this",
@@ -413,7 +413,7 @@
         "kind": 6,
         "importPath": "agent.src.agent.main",
         "description": "agent.src.agent.main",
-        "peekOfCode": "class RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(\n                \"You are a helpful voice assistant who answers questions about \"\n                \"the document loaded into your knowledge base. \"\n                \"Always call the search_knowledge_base tool before answering \"\n                \"any question about its content — never guess or make things up. \"\n                \"Keep responses short and conversational, since this is spoken aloud. \"",
+        "peekOfCode": "class RagAgent(Agent):\n    def __init__(self, doc_id: str, instructions: str | None = None) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=instructions or DEFAULT_INSTRUCTIONS\n        )\n    @function_tool\n    async def search_knowledge_base(self, context: RunContext, query: str) -> str:\n        \"\"\"\n        Search the knowledge base for information relevant to the query.",
         "detail": "agent.src.agent.main",
         "documentation": {}
     },
@@ -422,7 +422,7 @@
         "kind": 2,
         "importPath": "agent.src.agent.main",
         "description": "agent.src.agent.main",
-        "peekOfCode": "def prewarm(proc: JobProcess) -> None:\n    pass\nclass RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(\n                \"You are a helpful voice assistant who answers questions about \"\n                \"the document loaded into your knowledge base. \"\n                \"Always call the search_knowledge_base tool before answering \"",
+        "peekOfCode": "def prewarm(proc: JobProcess) -> None:\n    pass\nclass RagAgent(Agent):\n    def __init__(self, doc_id: str, instructions: str | None = None) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=instructions or DEFAULT_INSTRUCTIONS\n        )\n    @function_tool\n    async def search_knowledge_base(self, context: RunContext, query: str) -> str:",
         "detail": "agent.src.agent.main",
         "documentation": {}
     },
@@ -431,7 +431,16 @@
         "kind": 5,
         "importPath": "agent.src.agent.main",
         "description": "agent.src.agent.main",
-        "peekOfCode": "logger = logging.getLogger(\"voice-rag-agent\")\nlogger.setLevel(logging.INFO)\nload_dotenv(\".env.local\")\ndef prewarm(proc: JobProcess) -> None:\n    pass\nclass RagAgent(Agent):\n    def __init__(self, doc_id: str) -> None:\n        self._doc_id = doc_id\n        super().__init__(\n            instructions=(",
+        "peekOfCode": "logger = logging.getLogger(\"voice-rag-agent\")\nlogger.setLevel(logging.INFO)\nload_dotenv(\".env.local\")\nDEFAULT_INSTRUCTIONS = (\n    \"You are a helpful voice assistant who answers questions about \"\n    \"the document loaded into your knowledge base. \"\n    \"Always call the search_knowledge_base tool before answering \"\n    \"any question about its content — never guess or make things up. \"\n    \"Keep responses short and conversational, since this is spoken aloud. \"\n    \"Do not use markdown, emojis, or special formatting.\"",
+        "detail": "agent.src.agent.main",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_INSTRUCTIONS",
+        "kind": 5,
+        "importPath": "agent.src.agent.main",
+        "description": "agent.src.agent.main",
+        "peekOfCode": "DEFAULT_INSTRUCTIONS = (\n    \"You are a helpful voice assistant who answers questions about \"\n    \"the document loaded into your knowledge base. \"\n    \"Always call the search_knowledge_base tool before answering \"\n    \"any question about its content — never guess or make things up. \"\n    \"Keep responses short and conversational, since this is spoken aloud. \"\n    \"Do not use markdown, emojis, or special formatting.\"\n)\ndef prewarm(proc: JobProcess) -> None:\n    pass",
         "detail": "agent.src.agent.main",
         "documentation": {}
     },
@@ -526,11 +535,38 @@
         "documentation": {}
     },
     {
+        "label": "PromptRequest",
+        "kind": 6,
+        "importPath": "agent.src.api.server",
+        "description": "agent.src.api.server",
+        "peekOfCode": "class PromptRequest(BaseModel):\n    prompt: str\n@app.get(\"/prompt\")\nasync def get_prompt():\n    return {\"prompt\": _read_prompt()}\n@app.put(\"/prompt\")\nasync def update_prompt(req: PromptRequest):\n    os.makedirs(os.path.dirname(PROMPT_FILE), exist_ok=True)\n    with open(PROMPT_FILE, \"w\") as f:\n        f.write(req.prompt)",
+        "detail": "agent.src.api.server",
+        "documentation": {}
+    },
+    {
         "label": "AskRequest",
         "kind": 6,
         "importPath": "agent.src.api.server",
         "description": "agent.src.api.server",
         "peekOfCode": "class AskRequest(BaseModel):\n    doc_id: str\n    question: str\n@app.post(\"/ask\")\nasync def ask_document(req: AskRequest):\n    response = answer(req.question, req.doc_id)\n    return {\n        \"answer\": response\n    }",
+        "detail": "agent.src.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "PROMPT_FILE",
+        "kind": 5,
+        "importPath": "agent.src.api.server",
+        "description": "agent.src.api.server",
+        "peekOfCode": "PROMPT_FILE = os.path.join(\".\", \"tmp\", \"custom_prompt.txt\")\nDEFAULT_PROMPT = (\n    \"You are a helpful voice assistant who answers questions about \"\n    \"the document loaded into your knowledge base. \"\n    \"Always call the search_knowledge_base tool before answering \"\n    \"any question about its content — never guess or make things up. \"\n    \"Keep responses short and conversational, since this is spoken aloud. \"\n    \"Do not use markdown, emojis, or special formatting.\"\n)\ndef _read_prompt() -> str:",
+        "detail": "agent.src.api.server",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_PROMPT",
+        "kind": 5,
+        "importPath": "agent.src.api.server",
+        "description": "agent.src.api.server",
+        "peekOfCode": "DEFAULT_PROMPT = (\n    \"You are a helpful voice assistant who answers questions about \"\n    \"the document loaded into your knowledge base. \"\n    \"Always call the search_knowledge_base tool before answering \"\n    \"any question about its content — never guess or make things up. \"\n    \"Keep responses short and conversational, since this is spoken aloud. \"\n    \"Do not use markdown, emojis, or special formatting.\"\n)\ndef _read_prompt() -> str:\n    \"\"\"Read the custom prompt file, falling back to the default.\"\"\"",
         "detail": "agent.src.api.server",
         "documentation": {}
     },
